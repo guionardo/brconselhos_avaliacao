@@ -23,10 +23,14 @@ namespace WebEscola_1.Controllers
             if (string.IsNullOrEmpty(op))
             {
                 lista = _contexto.Professor.ToList();
+                ViewData["Objeto"] = "Professor";
+                ViewData["Função"] = "Listar todos os professores";
             }
             else
             {
                 lista = new List<Professor>();
+                ViewData["Objeto"] = "Professor";
+                ViewData["Função"] = "Listar os professores com alunos com idade entre 15 e 17 anos";
                 var alunos = _contexto.Aluno.ToList();
                 foreach (var professor in _contexto.Professor)
                 {
@@ -56,6 +60,8 @@ namespace WebEscola_1.Controllers
         public IActionResult Create()
         {
             var professor = new Professor();
+            ViewData["Objeto"] = "Professor";
+            ViewData["Função"] = "Create";
             return View(professor);
         }
 
@@ -68,6 +74,8 @@ namespace WebEscola_1.Controllers
                 _contexto.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewData["Objeto"] = "Professor";
+            ViewData["Função"] = "Create";
             return View(professor);
         }
 
@@ -75,6 +83,8 @@ namespace WebEscola_1.Controllers
         public IActionResult Edit(int Id)
         {
             var professor = _contexto.Professor.Find(Id);
+            ViewData["Objeto"] = "Professor";
+            ViewData["Função"] = WebEscola_1.Consts.Edit;
             return View(professor);
         }
 
@@ -87,6 +97,8 @@ namespace WebEscola_1.Controllers
                 _contexto.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewData["Objeto"] = "Professor";
+            ViewData["Função"] = WebEscola_1.Consts.Edit;
             return View(professor);
         }
 
@@ -94,6 +106,8 @@ namespace WebEscola_1.Controllers
         public IActionResult Delete(int Id)
         {
             var professor = _contexto.Professor.Find(Id);
+            ViewData["Objeto"] = "Professor";
+            ViewData["Função"] = "Delete";
             return View(professor);
         }
 
@@ -108,6 +122,8 @@ namespace WebEscola_1.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewData["Objeto"] = "Professor";
+            ViewData["Função"] = "Delete";
             return View(_professor);
         }
 
@@ -116,6 +132,8 @@ namespace WebEscola_1.Controllers
         {
             var professor = _contexto.Professor.Find(Id);
             AtualizarAlunos(professor);
+            ViewData["Objeto"] = "Professor";
+            ViewData["Função"] = "Detalhes";
             return View(professor);
         }
 

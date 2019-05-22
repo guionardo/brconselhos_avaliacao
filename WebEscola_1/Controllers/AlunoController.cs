@@ -20,19 +20,21 @@ namespace WebEscola_1.Controllers
             _contexto = contexto;
         }
         // GET: Aluno
-        public ActionResult Index(string maiores=null)
+        public ActionResult Index(string maiores = null)
         {
             var alunos = _contexto.Aluno.Include(a => a.Professor);
             List<Aluno> lista;
+            ViewData["Objeto"] = "Aluno";
+
             if (string.IsNullOrEmpty(maiores))
             {
                 lista = alunos.ToList();
-                ViewData["Message"] = "Todos os alunos.";
+                ViewData["Função"] = "Listar todos os alunos";
                 ViewBag.Title = "Todos os alunos";
             }
             else
             {
-                ViewData["Message"] = "Alunos com mais de 16 anos.";
+                ViewData["Função"] = "Listar todos os alunos com mais de 16 anos.";
                 ViewBag.Title = "Alunos com mais de 16 anos";
                 lista = new List<Aluno>();
                 foreach (var aluno in alunos)
@@ -53,6 +55,8 @@ namespace WebEscola_1.Controllers
         {
             var aluno = _contexto.Aluno.Find(id);
             aluno.Professor = _contexto.Professor.Find(aluno.ProfessorId);
+            ViewData["Objeto"] = "Aluno";
+            ViewData["Função"] = "View";
             return View(aluno);
         }
 
@@ -62,11 +66,13 @@ namespace WebEscola_1.Controllers
         {
             var aluno = new Aluno();
             ViewBag.ProfessorId = new SelectList(_contexto.Professor, "Id", "Nome");
+            ViewData["Objeto"] = "Aluno";
+            ViewData["Função"] = "Create";
             return View(aluno);
         }
 
         // POST: Aluno/Create
-        [HttpPost]        
+        [HttpPost]
         public ActionResult Create(Aluno aluno)
         {
             if (ModelState.IsValid)
@@ -75,6 +81,8 @@ namespace WebEscola_1.Controllers
                 _contexto.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewData["Objeto"] = "Aluno";
+            ViewData["Função"] = "Create";
             return View(aluno);
         }
 
@@ -83,8 +91,9 @@ namespace WebEscola_1.Controllers
         public ActionResult Edit(int id)
         {
             var aluno = _contexto.Aluno.Find(id);
-            ViewBag.ProfessorId = new SelectList(_contexto.Professor, "Id", "Nome",aluno.ProfessorId);
-
+            ViewBag.ProfessorId = new SelectList(_contexto.Professor, "Id", "Nome", aluno.ProfessorId);
+            ViewData["Objeto"] = "Aluno";
+            ViewData["Função"] = WebEscola_1.Consts.Edit;
             return View(aluno);
         }
 
@@ -100,6 +109,8 @@ namespace WebEscola_1.Controllers
                 return RedirectToAction("Index");
             }
             CarregaProfessores(_aluno.Professor);
+            ViewData["Objeto"] = "Aluno";
+            ViewData["Função"] = WebEscola_1.Consts.Edit;
             return View(_aluno);
         }
 
@@ -109,10 +120,12 @@ namespace WebEscola_1.Controllers
         {
             var aluno = _contexto.Aluno.Find(id);
             aluno.Professor = _contexto.Professor.Find(aluno.ProfessorId);
+            ViewData["Objeto"] = "Aluno";
+            ViewData["Função"] = "Delete";
             return View(aluno);
         }
 
-       
+
         // POST: Aluno/Delete/5
         [HttpPost]
         public ActionResult Delete(Aluno _aluno)
@@ -124,6 +137,8 @@ namespace WebEscola_1.Controllers
                 _contexto.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewData["Objeto"] = "Aluno";
+            ViewData["Função"] = "Delete";
             return View(_aluno);
         }
 

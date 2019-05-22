@@ -13,8 +13,6 @@ namespace WebEscola_1.Models.Contexto
         {
             Database.EnsureCreated();
         }
-
-        public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Professor> Professor { get; set; }
         public DbSet<Aluno> Aluno { get; set; }
     }

@@ -32,8 +32,8 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Professor" asp-action="Index">Professor</a></li>
                     <li><a asp-area="" asp-controller="Aluno" asp-action="Index">Aluno</a></li>                    
-                    <li>@Html.ActionLink("Alunos Maiores","Index","Aluno", new {maiores = "1"})</li>                    
-                    <li>@Html.ActionLink("Professores com alunos 15 a 17 anos","Index","Professor",new { op = "1" })</li>
+                    <li>@Html.ActionLink("Alunos Maiores", "Index", "Aluno", new { maiores = "1" })</li>                    
+                    <li>@Html.ActionLink("Professores com alunos 15 a 17 anos", "Index", "Professor", new { op = "1" })</li>
                 </ul>
             </div>
         </div>
@@ -42,8 +42,9 @@
     <partial name="_CookieConsentPartial" />
 
     <div class="container body-content">
-        <h2>@ViewData["Title"]</h2>
-        <h3>@ViewData["Message"]</h3>
+        <h3>Objeto:@ViewData["Objeto"]</h3>
+        <h4>Função:@ViewData["Função"]</h4> 
+        <hr />
         @RenderBody()
         <hr />
         <footer>

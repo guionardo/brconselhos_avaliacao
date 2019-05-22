@@ -17,7 +17,7 @@ namespace WebEscola_1.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Projeto Avaliação Prática BR Conselhos.";
 
             return View();
         }

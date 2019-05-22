@@ -62,7 +62,7 @@ namespace WebEscola_1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Usuarios}/{action=Index}/{id?}");
+                    template: "{controller=Professor}/{action=Index}/{id?}");
             });
         }
     }

@@ -23,6 +23,18 @@
             @Html.DisplayFor(model => model.Nome)
         </dd>
     </dl>
+    <hr />
+    @Html.LabelFor(model=>model.Alunos)
+    
+    <dl class="dl-horizontal">
+        @foreach(var aluno in  Model.Alunos)
+        {
+        <dt>@aluno.Nome</dt>
+        <dd>@aluno.DataNascimento.ToShortDateString()</dd>
+
+        }
+    </dl>
+
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |

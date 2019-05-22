@@ -20,17 +20,39 @@ namespace WebEscola_1.Controllers
             _contexto = contexto;
         }
         // GET: Aluno
-        public ActionResult Index()
+        public ActionResult Index(string maiores=null)
         {
-            var alunos = _contexto.Aluno.Include(a => a.Professor);            
-            return View(alunos.ToList());
+            var alunos = _contexto.Aluno.Include(a => a.Professor);
+            List<Aluno> lista;
+            if (string.IsNullOrEmpty(maiores))
+            {
+                lista = alunos.ToList();
+                ViewData["Message"] = "Todos os alunos.";
+                ViewBag.Title = "Todos os alunos";
+            }
+            else
+            {
+                ViewData["Message"] = "Alunos com mais de 16 anos.";
+                ViewBag.Title = "Alunos com mais de 16 anos";
+                lista = new List<Aluno>();
+                foreach (var aluno in alunos)
+                {
+                    if (DateTime.Now.Subtract(aluno.DataNascimento).TotalDays / 365 > 16)
+                    {
+                        lista.Add(aluno);
+                    }
+                }
+            }
+            return View(lista);
         }
+
 
         // GET: Aluno/Details/5
         [HttpGet]
         public ActionResult Details(int id)
         {
-            var aluno = _contexto.Aluno.Include(a => a.Professor).Find(id);
+            var aluno = _contexto.Aluno.Find(id);
+            aluno.Professor = _contexto.Professor.Find(aluno.ProfessorId);
             return View(aluno);
         }
 
@@ -39,13 +61,12 @@ namespace WebEscola_1.Controllers
         public ActionResult Create()
         {
             var aluno = new Aluno();
-            CarregaProfessores();
+            ViewBag.ProfessorId = new SelectList(_contexto.Professor, "Id", "Nome");
             return View(aluno);
         }
 
         // POST: Aluno/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost]        
         public ActionResult Create(Aluno aluno)
         {
             if (ModelState.IsValid)
@@ -61,8 +82,9 @@ namespace WebEscola_1.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var aluno = _contexto.Aluno.Include(a => a.Professor).Find(id);
-            CarregaProfessores(aluno.Professor);
+            var aluno = _contexto.Aluno.Find(id);
+            ViewBag.ProfessorId = new SelectList(_contexto.Professor, "Id", "Nome",aluno.ProfessorId);
+
             return View(aluno);
         }
 
@@ -86,9 +108,11 @@ namespace WebEscola_1.Controllers
         public ActionResult Delete(int id)
         {
             var aluno = _contexto.Aluno.Find(id);
+            aluno.Professor = _contexto.Professor.Find(aluno.ProfessorId);
             return View(aluno);
         }
 
+       
         // POST: Aluno/Delete/5
         [HttpPost]
         public ActionResult Delete(Aluno _aluno)
@@ -105,17 +129,18 @@ namespace WebEscola_1.Controllers
 
         public void CarregaProfessores(object selectedProfessor = null)
         {
-            var itensProfessores = from p in _contexto.Professor
-                                   orderby p.Nome
-                                   select p;
-            ViewBag.Professores = new SelectList(itensProfessores, "ProfessorId", "Nome", selectedProfessor);
-            /*            var ItensProfessores = new List<SelectListItem>();
-                        foreach(var professor in _contexto.Professor.ToList())
-                        {
-                            ItensProfessores.Add(new SelectListItem(professor.Nome, professor.Id.ToString()));
-                        }
-                        ViewBag.Professores = ItensProfessores;*/
-        }        
+            var ItensProfessores = new List<SelectListItem>();
+            foreach (var professor in _contexto.Professor.ToList())
+            {
+                ItensProfessores.Add(new SelectListItem(professor.Nome, professor.Id.ToString()));
+            }
+            ViewBag.Professores = ItensProfessores;
+        }
+
+        public List<Professor> ListaProfessores()
+        {
+            return _contexto.Professor.ToList();
+        }
 
     }
 }

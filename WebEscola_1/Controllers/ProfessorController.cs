@@ -17,9 +17,38 @@ namespace WebEscola_1.Controllers
             _contexto = contexto;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string op = null)
         {
-            var lista = _contexto.Professor.ToList();
+            List<Professor> lista = null;
+            if (string.IsNullOrEmpty(op))
+            {
+                lista = _contexto.Professor.ToList();
+            }
+            else
+            {
+                lista = new List<Professor>();
+                var alunos = _contexto.Aluno.ToList();
+                foreach (var professor in _contexto.Professor)
+                {
+                    if (professor.Alunos == null)
+                    {
+                        professor.Alunos = new List<Aluno>();
+                        foreach (var aluno in alunos)
+                            if (aluno.ProfessorId == professor.Id)
+                                professor.Alunos.Add(aluno);
+                    }
+
+                    if (professor.Alunos != null && professor.Alunos.Count > 0)
+                    {
+                        double somaIdades = 0;
+                        foreach (var aluno in professor.Alunos)
+                            somaIdades += DateTime.Today.Subtract(aluno.DataNascimento).TotalDays;
+                        double media = (somaIdades / professor.Alunos.Count) / 365;
+                        if (media >= 15 && media <= 17)
+                            lista.Add(professor);
+                    }
+                }
+            }
             return View(lista);
         }
 
@@ -86,7 +115,22 @@ namespace WebEscola_1.Controllers
         public IActionResult Details(int Id)
         {
             var professor = _contexto.Professor.Find(Id);
+            AtualizarAlunos(professor);
             return View(professor);
+        }
+
+        private void AtualizarAlunos(Professor professor)
+        {
+            if (professor == null || professor.Alunos != null)
+                return;
+            professor.Alunos = new List<Aluno>();
+            var query = from aluno
+                        in _contexto.Aluno
+                        where aluno.ProfessorId == professor.Id
+                        select aluno;
+            foreach (var aluno in query)
+                if (!professor.Alunos.Contains(aluno))
+                    professor.Alunos.Add(aluno);
         }
 
     }

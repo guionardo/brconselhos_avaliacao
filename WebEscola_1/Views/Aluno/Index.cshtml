@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>@Html.DisplayText(ViewBag.Title)</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -41,9 +41,9 @@
                 @Html.DisplayFor(modelItem => item.NomeProfessor)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id/* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id/* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id/* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id}) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
         </tr>
 }

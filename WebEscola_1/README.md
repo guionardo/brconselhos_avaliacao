@@ -12,3 +12,5 @@ No projeto, além das telas de cadastros, deverão existir 2 listagens:
 Segue diagrama de classes à ser aplicado: 
  
 ![Diagrama](brconselhos_avaliacao.png) 
+
+Atualização 22/05/2019
